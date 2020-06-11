@@ -139,8 +139,7 @@ vim rpcsvc-proto fakeroot
 ```
 * 克隆源码
 ```shell
-git clone --depth=1 https://gitee.com/hanwckf/rt-n56u.git /opt/rt-n56u
-#git clone --depth=1 https://github.com/hanwckf/rt-n56u.git /opt/rt-n56u
+git clone --depth=1 https://github.com/Yonsm/rt-n56u.git /opt/rt-n56u
 ```
 * 准备工具链
 ```shell
@@ -169,6 +168,12 @@ cd /opt/rt-n56u/trunk
 fakeroot ./build_firmware_modify PSG1218
 # 脚本第一个参数为路由型号，在trunk/configs/templates/中
 # 编译好的固件在trunk/images里
+```
+
+* 构建和刷写（Yonsm 追加，替代上面的`清理代码树并开始编译`）
+```shell
+./make_firmware PSG1218
+./flash_firmware 192.168.2.1
 ```
 
 ***
