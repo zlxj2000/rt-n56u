@@ -496,6 +496,23 @@ void lease_update_dns(int force)
       /* force transfer to authoritative secondaries */
       daemon->soa_sn++;
 #endif
+      if (option_bool(OPT_DHCP_IMMORTAL)) {
+        if (force) {
+          cache_unhash_dhcp();
+          for (struct dhcp_config *conf = daemon->dhcp_conf; conf; conf = conf->next) {
+            if (conf->hostname) {
+              if (conf->flags & CONFIG_ADDR)
+                cache_add_dhcp_entry(conf->hostname, AF_INET, (struct all_addr *)&conf->addr, 0);
+#ifdef HAVE_DHCP6
+              if (conf->flags & CONFIG_ADDR6)
+                cache_add_dhcp_entry(conf->hostname, AF_INET6, (struct all_addr *)&conf->addr6, 0);
+#endif
+            }
+          }
+        }
+        dns_dirty = 0;
+        return;
+      }
       
       cache_unhash_dhcp();
 
