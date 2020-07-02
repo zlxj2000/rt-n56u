@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+	echo "Usage $0 <BOARD_NAME|admin@iMac:~/Desktop>"
+	exit 0
+fi
+
+if echo "$1" | grep : > /dev/null; then
+	for BOARD_NAME in XY-C1 NEWIFI3 NEWIFI-MINI K2P-5.0 RM2100 R2100; do
+		./clear_tree_simple
+		fakeroot ./build_firmware_modify "$BOARD_NAME"
+		TRX=`ls images/*.trx`
+		[ -f "$TRX" ] || exit 1
+		scp "$TRX" "$1"
+	done
+	exit 0
+fi
+
+./clear_tree_simple
+fakeroot ./build_firmware_modify "$1"
